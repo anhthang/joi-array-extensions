@@ -6,13 +6,13 @@ Joi extensions for extra array rules.
 Usage is a two steps process. First, a schema is constructed using the provided types and constraints:
 
 ```js
-const BaseJoi = require('joi');
-const Extension = require('joi-date-extensions');
-const Joi = BaseJoi.extend(Extension);
+const BaseJoi = require('joi')
+const Extension = require('joi-array-extensions')
+const Joi = BaseJoi.extend(Extension)
 
 const schema = Joi.array().items({
     idx: Joi.number().integer()
-}).continuous('idx', 1);
+}).continuous('idx', 1)
 ```
 
 # API
