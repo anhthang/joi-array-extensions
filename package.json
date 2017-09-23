@@ -1,0 +1,41 @@
+{
+  "name": "joi-array-extensions",
+  "version": "1.0.0",
+  "description": "Joi extensions for extra array rules.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "istanbul test ./node_modules/tape/bin/tape 'test/*.js'",
+    "cover": "istanbul cover ./node_modules/tape/bin/tape 'test/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buianhthang/joi-array-extensions.git"
+  },
+  "keywords": [
+    "joi",
+    "array",
+    "extensions",
+    "schema",
+    "validation"
+  ],
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "author": "Anh Thang Bui <anhthang@goquo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buianhthang/joi-array-extensions/issues"
+  },
+  "homepage": "https://github.com/buianhthang/joi-array-extensions#readme",
+  "dependencies": {
+    "hoek": "^4.2.0",
+    "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
+    "joi": ">=10.x.x"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "tape": "^4.8.0"
+  }
+}
