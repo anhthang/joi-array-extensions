@@ -19,6 +19,54 @@ const incorrect_sample = [{
     idx: 3
 }]
 
+tape.test('should be correctly described', (t) => {
+    const schema = Joi.array().items({
+        idx: Joi.number().integer()
+    }).continuous('idx', 2);
+
+    t.deepEqual(schema.describe(), {
+        type: 'array',
+        flags: {
+            sparse: false,
+            comparator: 'idx',
+            startIndex: 2
+        },
+        options: {
+            language: {
+                array: {
+                    continuous_from: 'must be start from {{startIndex}}',
+                    continuous_broken: 'should be {{expectedValue}}'
+                }
+            }
+        },
+        rules: [
+            {
+                name: 'continuous',
+                arg: {
+                    comparator: 'idx',
+                    startIndex: 2
+                },
+                description: 'idx must be an integer and started continuous from 2'
+            }
+        ],
+        items: [
+            {
+                type: 'object',
+                children: {
+                    idx: {
+                        type: 'number',
+                        invalids: [Infinity, -Infinity],
+                        rules: [{
+                            name: 'integer'
+                        }]
+                    }
+                }
+            }
+        ]
+    })
+    t.end()
+})
+
 tape.test('fails with invalid comparator', (t) => {
     const schema = Joi.array().items({
         idx: Joi.number().integer()
@@ -27,15 +75,6 @@ tape.test('fails with invalid comparator', (t) => {
     t.throws(() => schema.validate(correct_sample), Error, 'comparator must be a function or a string')
     t.end()
 })
-
-// tape.test('fails with invalid startIndex', (t) => {
-//     const schema = Joi.array().items({
-//         idx: Joi.number().integer()
-//     }).continuous('idx', 'a')
-
-//     t.throws(() => schema.validate(correct_sample), ValidationError, 'startIndex must be a number')
-//     t.end()
-// })
 
 tape.test('fails without startIndex', (t) => {
     const schema = Joi.array().items({
