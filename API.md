@@ -1,4 +1,4 @@
-# 1.0.0 API Reference
+# 1.1.0 API Reference
 
 - [Rules](#rules)
   - [`array.continuous(key, startIndex)`](#arraycontinuouskeystartIndex)
