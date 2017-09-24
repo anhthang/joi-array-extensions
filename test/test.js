@@ -1,5 +1,4 @@
 const Lab = require('lab')
-const Code = require('code')
 const Helper = require('./helper')
 const BaseJoi = require('joi')
 const Extension = require('../')
@@ -8,8 +7,7 @@ const Joi = BaseJoi.extend(Extension)
 
 const lab = Lab.script()
 
-const { describe, it } = lab
-const { expect } = Code
+const { describe, it, expect } = lab
 
 const correct = [
     {
