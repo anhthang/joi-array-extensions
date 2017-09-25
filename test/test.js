@@ -33,6 +33,26 @@ const incorrect = [
     }
 ]
 
+const sample = {
+    arr: [
+        {
+            obj: {
+                idx: 1
+            }
+        },
+        {
+            obj: {
+                idx: 2
+            }
+        },
+        {
+            obj: {
+                idx: 3
+            }
+        }
+    ]
+}
+
 describe('array', () => {
     describe('continuous()', () => {
         it('fails with bad formats', done => {
@@ -59,10 +79,19 @@ describe('array', () => {
                     })
                     .continuous('idx', 'a')
             }).to.throw(/must be a number/)
+
+            expect(() => {
+                Joi.array()
+                    .items({
+                        idx: Joi.number().integer()
+                    })
+                    .continuous('idx', 1.2)
+            }).to.throw(/must be an integer/)
+
             done()
         })
 
-        it('validates without startIndex', done => {
+        it('validates without limit', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -71,15 +100,12 @@ describe('array', () => {
 
             Helper.validate(
                 schema,
-                [
-                    // [correct, false, null, '"value" must be start from 0'],
-                    [incorrect, false, null, '"value" must be start from 0']
-                ],
+                [[incorrect, false, null, '"idx" must be start from 0']],
                 done
             )
         })
 
-        it('validates not start from startIndex', done => {
+        it('validates not start from limit', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -88,15 +114,12 @@ describe('array', () => {
 
             Helper.validate(
                 schema,
-                [
-                    // [correct, false, null, '"value" must be start from 2'],
-                    [incorrect, false, null, '"value" must be start from 2']
-                ],
+                [[incorrect, false, null, '"idx" must be start from 2']],
                 done
             )
         })
 
-        it('validates start corretly but noncontinuous', done => {
+        it('validates start correctly but noncontinuous', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -107,7 +130,84 @@ describe('array', () => {
                 schema,
                 [
                     [correct, true],
-                    [incorrect, false, null, '"value" should be 2']
+                    [incorrect, false, null, '"idx" should be 2']
+                ],
+                done
+            )
+        })
+
+        it('validates with comparator is object path', done => {
+            const schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', 2)
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        sample,
+                        false,
+                        null,
+                        'child "arr" fails because ["obj.idx" must be start from 2]'
+                    ]
+                ],
+                done
+            )
+        })
+
+        it('validates with limit is a reference', done => {
+            const schema = Joi.object().keys({
+                ref: Joi.number().integer(),
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', Joi.ref('ref'))
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        Object.assign(sample, { ref: 2 }),
+                        false,
+                        null,
+                        'child "arr" fails because ["obj.idx" must be start from 2]'
+                    ]
+                ],
+                done
+            )
+        })
+
+        it('validates with limit is a reference but not a number', done => {
+            const schema = Joi.object().keys({
+                ref: Joi.string().required(),
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', Joi.ref('ref'))
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        Object.assign(sample, { ref: 'a' }),
+                        false,
+                        null,
+                        'child "arr" fails because ["arr" references "ref" which is not a positive integer]'
+                    ]
                 ],
                 done
             )
@@ -138,8 +238,7 @@ describe('array', () => {
                 options: {
                     language: {
                         array: {
-                            continuous_from:
-                                'must be start from {{startIndex}}',
+                            continuous_from: 'must be start from {{limit}}',
                             continuous_broken: 'should be {{expectedValue}}'
                         }
                     }
@@ -149,7 +248,7 @@ describe('array', () => {
                         name: 'continuous',
                         arg: {
                             comparator: 'idx',
-                            startIndex: 2
+                            limit: 2
                         },
                         description:
                             'idx must be an integer and started continuous from 2'

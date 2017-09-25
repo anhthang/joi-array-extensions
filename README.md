@@ -3,7 +3,7 @@ Joi extensions for extra array rules.
 
 [![NPM](https://nodei.co/npm/joi-array-extensions.png)](https://nodei.co/npm/joi-array-extensions/)
 
-[![npm version](https://badge.fury.io/js/camaro.svg)](https://badge.fury.io/js/camaro)
+[![npm version](https://badge.fury.io/js/joi-array-extensions.svg)](https://badge.fury.io/js/joi-array-extensions)
 [![Build Status](https://travis-ci.org/buianhthang/joi-array-extensions.svg?branch=master)](https://travis-ci.org/buianhthang/joi-array-extensions)
 [![Dependency Status](https://dependencyci.com/github/buianhthang/joi-array-extensions/badge)](https://dependencyci.com/github/buianhthang/joi-array-extensions)
 
@@ -19,6 +19,17 @@ const Joi = BaseJoi.extend(Extension)
 const schema = Joi.array().items({
     idx: Joi.number().integer()
 }).continuous('idx', 1)
+```
+
+# Coverage
+
+```
+9 tests complete
+Test duration: 59 ms
+Assertions count: 25 (verbosity: 2.78)
+No global variable leaks detected
+Coverage: 100.00%
+Linting results: No issues
 ```
 
 # API
