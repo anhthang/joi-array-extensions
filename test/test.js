@@ -100,10 +100,7 @@ describe('array', () => {
 
             Helper.validate(
                 schema,
-                [
-                    // [correct, false, null, '"idx" must be start from 0'],
-                    [incorrect, false, null, '"idx" must be start from 0']
-                ],
+                [[incorrect, false, null, '"idx" must be start from 0']],
                 done
             )
         })
@@ -117,10 +114,7 @@ describe('array', () => {
 
             Helper.validate(
                 schema,
-                [
-                    // [correct, false, null, '"idx" must be start from 2'],
-                    [incorrect, false, null, '"idx" must be start from 2']
-                ],
+                [[incorrect, false, null, '"idx" must be start from 2']],
                 done
             )
         })
