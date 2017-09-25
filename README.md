@@ -24,13 +24,12 @@ const schema = Joi.array().items({
 # Coverage
 
 ```
-8 tests complete
-Test duration: 60 ms
-Assertions count: 22 (verbosity: 2.75)
+9 tests complete
+Test duration: 59 ms
+Assertions count: 25 (verbosity: 2.78)
 No global variable leaks detected
-Coverage: 98.92% (1/93)
-lib/index.js missing coverage on line(s): 37
-Code coverage below threshold: 98.92 < 100
+Coverage: 100.00%
+Linting results: No issues
 ```
 
 # API

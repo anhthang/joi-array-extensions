@@ -101,8 +101,8 @@ describe('array', () => {
             Helper.validate(
                 schema,
                 [
-                    // [correct, false, null, '"value" must be start from 0'],
-                    [incorrect, false, null, '"value" must be start from 0']
+                    // [correct, false, null, '"idx" must be start from 0'],
+                    [incorrect, false, null, '"idx" must be start from 0']
                 ],
                 done
             )
@@ -118,14 +118,14 @@ describe('array', () => {
             Helper.validate(
                 schema,
                 [
-                    // [correct, false, null, '"value" must be start from 2'],
-                    [incorrect, false, null, '"value" must be start from 2']
+                    // [correct, false, null, '"idx" must be start from 2'],
+                    [incorrect, false, null, '"idx" must be start from 2']
                 ],
                 done
             )
         })
 
-        it('validates start corretly but noncontinuous', done => {
+        it('validates start correctly but noncontinuous', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -136,7 +136,32 @@ describe('array', () => {
                 schema,
                 [
                     [correct, true],
-                    [incorrect, false, null, '"value" should be 2']
+                    [incorrect, false, null, '"idx" should be 2']
+                ],
+                done
+            )
+        })
+
+        it('validates with comparator is object path', done => {
+            const schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', 2)
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        sample,
+                        false,
+                        null,
+                        'child "arr" fails because ["obj.idx" must be start from 2]'
+                    ]
                 ],
                 done
             )
@@ -161,7 +186,7 @@ describe('array', () => {
                         Object.assign(sample, { ref: 2 }),
                         false,
                         null,
-                        'child "arr" fails because ["arr" must be start from 2]'
+                        'child "arr" fails because ["obj.idx" must be start from 2]'
                     ]
                 ],
                 done
