@@ -1,6 +1,6 @@
 {
   "name": "joi-array-extensions",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Joi extensions for extra array rules.",
   "main": "lib/index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "author": "Anh Thang Bui <anhthang@goquo.com>",
+  "author": "Anh Thang Bui <buianhthang89@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/buianhthang/joi-array-extensions/issues"
