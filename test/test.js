@@ -33,6 +33,26 @@ const incorrect = [
     }
 ]
 
+const sample = {
+    arr: [
+        {
+            obj: {
+                idx: 1
+            }
+        },
+        {
+            obj: {
+                idx: 2
+            }
+        },
+        {
+            obj: {
+                idx: 3
+            }
+        }
+    ]
+}
+
 describe('array', () => {
     describe('continuous()', () => {
         it('fails with bad formats', done => {
@@ -59,10 +79,19 @@ describe('array', () => {
                     })
                     .continuous('idx', 'a')
             }).to.throw(/must be a number/)
+
+            expect(() => {
+                Joi.array()
+                    .items({
+                        idx: Joi.number().integer()
+                    })
+                    .continuous('idx', 1.2)
+            }).to.throw(/must be an integer/)
+
             done()
         })
 
-        it('validates without startIndex', done => {
+        it('validates without limit', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -79,7 +108,7 @@ describe('array', () => {
             )
         })
 
-        it('validates not start from startIndex', done => {
+        it('validates not start from limit', done => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -113,6 +142,58 @@ describe('array', () => {
             )
         })
 
+        it('validates with limit is a reference', done => {
+            const schema = Joi.object().keys({
+                ref: Joi.number().integer(),
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', Joi.ref('ref'))
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        Object.assign(sample, { ref: 2 }),
+                        false,
+                        null,
+                        'child "arr" fails because ["arr" must be start from 2]'
+                    ]
+                ],
+                done
+            )
+        })
+
+        it('validates with limit is a reference but not a number', done => {
+            const schema = Joi.object().keys({
+                ref: Joi.string().required(),
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', Joi.ref('ref'))
+            })
+
+            Helper.validate(
+                schema,
+                [
+                    [
+                        Object.assign(sample, { ref: 'a' }),
+                        false,
+                        null,
+                        'child "arr" fails because ["arr" references "ref" which is not a positive integer]'
+                    ]
+                ],
+                done
+            )
+        })
+
         it('validates all correct', done => {
             const schema = Joi.array()
                 .items({
@@ -138,8 +219,7 @@ describe('array', () => {
                 options: {
                     language: {
                         array: {
-                            continuous_from:
-                                'must be start from {{startIndex}}',
+                            continuous_from: 'must be start from {{limit}}',
                             continuous_broken: 'should be {{expectedValue}}'
                         }
                     }
@@ -149,7 +229,7 @@ describe('array', () => {
                         name: 'continuous',
                         arg: {
                             comparator: 'idx',
-                            startIndex: 2
+                            limit: 2
                         },
                         description:
                             'idx must be an integer and started continuous from 2'

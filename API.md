@@ -1,17 +1,17 @@
 # 1.1.0 API Reference
 
 - [Rules](#rules)
-  - [`array.continuous(key, startIndex)`](#arraycontinuouskeystartIndex)
+  - [`array.continuous(comparator, limit)`](#arraycontinuouscomparatorlimit)
 
 <!-- tocstop -->
 
 # Rules
 
-## `array.continuous(key, startIndex)`
+## `array.continuous(comparator, limit)`
 
 Specifies the allowed date format:
-- `key` - `string` that should check continuous or not.
-- `startIndex` - `integer` the value `key` should be started. Default `0`
+- `comparator` - `string` or `func` that should check continuous or not.
+- `limit` - `integer` or `ref` the value of `comparator` should be start. Default `0`
 
 ```js
 const schema = Joi.array().items({
