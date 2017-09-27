@@ -1,8 +1,6 @@
 version: 1.0.{build}-{branch}
 
-image:
-  - Visual Studio 2015
-  # - Visual Studio 2017
+build: off
 
 artifacts:
   - path: build\**\*.tar.gz
@@ -25,10 +23,6 @@ install:
   - npm config set progress false
   - npm config set spin false
   - npm install
-
-build:
-  parallel: true
-  verbosity: minimal
 
 test_script:
   - npm test

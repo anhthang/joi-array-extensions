@@ -5,6 +5,7 @@ Joi extensions for extra array rules.
 
 [![npm version](https://badge.fury.io/js/joi-array-extensions.svg)](https://badge.fury.io/js/joi-array-extensions)
 [![Build Status](https://travis-ci.org/buianhthang/joi-array-extensions.svg?branch=master)](https://travis-ci.org/buianhthang/joi-array-extensions)
+[![Build status](https://ci.appveyor.com/api/projects/status/6942dw1ikdg729y2/branch/master?svg=true)](https://ci.appveyor.com/project/buianhthang/joi-array-extensions/branch/master)
 [![Dependency Status](https://dependencyci.com/github/buianhthang/joi-array-extensions/badge)](https://dependencyci.com/github/buianhthang/joi-array-extensions)
 
 # Usage
