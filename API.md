@@ -1,4 +1,4 @@
-# 1.1.0 API Reference
+# 1.1.1 API Reference
 
 - [Rules](#rules)
   - [`array.continuous(comparator, limit)`](#arraycontinuouscomparatorlimit)
@@ -10,7 +10,7 @@
 ## `array.continuous(comparator, limit)`
 
 Specifies the allowed date format:
-- `comparator` - `string` or `func` that should check continuous or not.
+- `comparator` - `string` that should check continuous or not.
 - `limit` - `integer` or `ref` the value of `comparator` should be start. Default `0`
 
 ```js
