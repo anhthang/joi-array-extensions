@@ -59,3 +59,4 @@ typings/
 
 # testing file
 sandbox.js
+.vscode/
