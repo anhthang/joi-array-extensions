@@ -1,4 +1,4 @@
-# 1.1.1 API Reference
+# 1.1.2 API Reference
 
 - [Rules](#rules)
   - [`array.continuous(comparator, limit)`](#arraycontinuouscomparatorlimit)
