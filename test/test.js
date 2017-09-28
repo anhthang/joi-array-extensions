@@ -9,48 +9,48 @@ const lab = Lab.script()
 
 const { describe, it, expect } = lab
 
-const correct = [
-    {
-        idx: 1
-    },
-    {
-        idx: 2
-    },
-    {
-        idx: 3
-    }
-]
-
-const incorrect = [
-    {
-        idx: 1
-    },
-    {
-        idx: 4
-    },
-    {
-        idx: 3
-    }
-]
-
-const sample = {
-    arr: [
+const input = {
+    correct: [
         {
-            obj: {
-                idx: 1
-            }
+            idx: 1
         },
         {
-            obj: {
-                idx: 2
-            }
+            idx: 2
         },
         {
-            obj: {
-                idx: 3
-            }
+            idx: 3
         }
-    ]
+    ],
+    incorrect: [
+        {
+            idx: 1
+        },
+        {
+            idx: 4
+        },
+        {
+            idx: 3
+        }
+    ],
+    sample: {
+        arr: [
+            {
+                obj: {
+                    idx: 1
+                }
+            },
+            {
+                obj: {
+                    idx: 2
+                }
+            },
+            {
+                obj: {
+                    idx: 4
+                }
+            }
+        ]
+    }
 }
 
 describe('array', () => {
@@ -92,52 +92,69 @@ describe('array', () => {
         })
 
         it('validates without limit', done => {
-            const schema = Joi.array()
+            let schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
                 })
                 .continuous('idx')
 
-            Helper.validate(
-                schema,
-                [[incorrect, false, null, '"idx" must be start from 0']],
-                done
-            )
+            Helper.validate(schema, [
+                [input.incorrect, false, null, '"idx" must be start from 0']
+            ])
+
+            schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx')
+            })
+
+            Helper.validate(schema, [
+                [
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["obj.idx" must be start from 0]'
+                ]
+            ])
+
+            schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous(i => i.obj.idx)
+            })
+
+            Helper.validate(schema, [
+                [
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["function comparator" must be start from 0]'
+                ]
+            ])
+
+            done()
         })
 
         it('validates not start from limit', done => {
-            const schema = Joi.array()
+            let schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
                 })
                 .continuous('idx', 2)
 
-            Helper.validate(
-                schema,
-                [[incorrect, false, null, '"idx" must be start from 2']],
-                done
-            )
-        })
+            Helper.validate(schema, [
+                [input.incorrect, false, null, '"idx" must be start from 2']
+            ])
 
-        it('validates start correctly but noncontinuous', done => {
-            const schema = Joi.array()
-                .items({
-                    idx: Joi.number().integer()
-                })
-                .continuous('idx', 1)
-
-            Helper.validate(
-                schema,
-                [
-                    [correct, true],
-                    [incorrect, false, null, '"idx" should be 2']
-                ],
-                done
-            )
-        })
-
-        it('validates with comparator is object path', done => {
-            const schema = Joi.object().keys({
+            schema = Joi.object().keys({
                 arr: Joi.array()
                     .items({
                         obj: Joi.object().keys({
@@ -147,22 +164,92 @@ describe('array', () => {
                     .continuous('obj.idx', 2)
             })
 
-            Helper.validate(
-                schema,
+            Helper.validate(schema, [
                 [
-                    [
-                        sample,
-                        false,
-                        null,
-                        'child "arr" fails because ["obj.idx" must be start from 2]'
-                    ]
-                ],
-                done
-            )
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["obj.idx" must be start from 2]'
+                ]
+            ])
+
+            schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous(i => i.obj.idx, 2)
+            })
+
+            Helper.validate(schema, [
+                [
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["function comparator" must be start from 2]'
+                ]
+            ])
+
+            done()
+        })
+
+        it('validates noncontinuous', done => {
+            let schema = Joi.array()
+                .items({
+                    idx: Joi.number().integer()
+                })
+                .continuous('idx', 1)
+
+            Helper.validate(schema, [
+                [input.correct, true],
+                [input.incorrect, false, null, '"idx" should be 2']
+            ])
+
+            schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous('obj.idx', 1)
+            })
+
+            Helper.validate(schema, [
+                [
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["obj.idx" should be 3]'
+                ]
+            ])
+
+            schema = Joi.object().keys({
+                arr: Joi.array()
+                    .items({
+                        obj: Joi.object().keys({
+                            idx: Joi.number().integer()
+                        })
+                    })
+                    .continuous(i => i.obj.idx, 1)
+            })
+
+            Helper.validate(schema, [
+                [
+                    input.sample,
+                    false,
+                    null,
+                    'child "arr" fails because ["function comparator" should be 3]'
+                ]
+            ])
+
+            done()
         })
 
         it('validates with limit is a reference', done => {
-            const schema = Joi.object().keys({
+            let schema = Joi.object().keys({
                 ref: Joi.number().integer(),
                 arr: Joi.array()
                     .items({
@@ -173,22 +260,16 @@ describe('array', () => {
                     .continuous('obj.idx', Joi.ref('ref'))
             })
 
-            Helper.validate(
-                schema,
+            Helper.validate(schema, [
                 [
-                    [
-                        Object.assign(sample, { ref: 2 }),
-                        false,
-                        null,
-                        'child "arr" fails because ["obj.idx" must be start from 2]'
-                    ]
-                ],
-                done
-            )
-        })
+                    Object.assign(input.sample, { ref: 2 }),
+                    false,
+                    null,
+                    'child "arr" fails because ["obj.idx" must be start from 2]'
+                ]
+            ])
 
-        it('validates with limit is a reference but not a number', done => {
-            const schema = Joi.object().keys({
+            schema = Joi.object().keys({
                 ref: Joi.string().required(),
                 arr: Joi.array()
                     .items({
@@ -199,18 +280,16 @@ describe('array', () => {
                     .continuous('obj.idx', Joi.ref('ref'))
             })
 
-            Helper.validate(
-                schema,
+            Helper.validate(schema, [
                 [
-                    [
-                        Object.assign(sample, { ref: 'a' }),
-                        false,
-                        null,
-                        'child "arr" fails because ["arr" references "ref" which is not a positive integer]'
-                    ]
-                ],
-                done
-            )
+                    Object.assign(input.sample, { ref: 'a' }),
+                    false,
+                    null,
+                    'child "arr" fails because ["arr" references "ref" which is not a positive integer]'
+                ]
+            ])
+
+            done()
         })
 
         it('validates all correct', done => {
@@ -220,7 +299,7 @@ describe('array', () => {
                 })
                 .continuous('idx', 1)
 
-            Helper.validate(schema, [[correct, true]], done)
+            Helper.validate(schema, [[input.correct, true]], done)
         })
 
         it('should be correctly described', done => {

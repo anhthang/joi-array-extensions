@@ -2,10 +2,6 @@ version: 1.0.{build}-{branch}
 
 build: off
 
-artifacts:
-  - path: build\**\*.tar.gz
-    name: joi-array-extensions
-
 environment:
   matrix:
     - nodejs_version: "8"
