@@ -1,6 +1,6 @@
 const Lab = require('lab')
-const Helper = require('./helper')
 const BaseJoi = require('joi')
+const Helper = require('./helper')
 const Extension = require('../')
 
 const Joi = BaseJoi.extend(Extension)
