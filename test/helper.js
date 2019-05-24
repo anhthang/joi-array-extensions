@@ -1,11 +1,12 @@
-const { expect } = require('lab')
-const Joi = require('joi')
+const Code = require('@hapi/code')
+const Joi = require('@hapi/joi')
 
+const { expect } = Code
 // Declare internals
 
 const internals = {}
 
-function validateOptions(schema, config, options, callback) {
+function validateOptions(schema, config, options) {
     try {
         const compiled = Joi.compile(schema)
         for (let i = 0; i < config.length; i += 1) {
@@ -55,14 +56,10 @@ function validateOptions(schema, config, options, callback) {
         err.at = internals.thrownAt()
         throw err
     }
-
-    if (callback) {
-        callback()
-    }
 }
 
-function validate(schema, config, callback) {
-    return validateOptions(schema, config, null, callback)
+function validate(schema, config) {
+    return validateOptions(schema, config, null)
 }
 
 // Imported from Code

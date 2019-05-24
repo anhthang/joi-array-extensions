@@ -4,7 +4,8 @@
   "description": "Joi extensions for extra array rules.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "lab -t 100 -a code -L",
+    "test": "lab -t 100 -a @hapi/code -L",
+    "test-cov-html": "lab -r html -o coverage.html -a @hapi/code",
     "lint": "eslint --fix"
   },
   "lint-staged": {
@@ -34,19 +35,20 @@
   },
   "homepage": "https://github.com/buianhthang/joi-array-extensions#readme",
   "dependencies": {
+    "@hapi/joi": "15.0.3",
     "lodash.find": "4.6.0",
     "lodash.map": "4.6.0",
     "lodash.orderby": "4.6.0"
   },
   "devDependencies": {
-    "@hapi/joi": "15.0.3",
+    "@hapi/code": "^5.3.1",
+    "@hapi/lab": "19.0.1",
     "eslint": "5.16.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "4.3.0",
     "eslint-plugin-import": "2.17.2",
     "eslint-plugin-prettier": "3.1.0",
     "husky": "2.3.0",
-    "lab": "18.0.2",
     "lint-staged": "8.1.7",
     "prettier": "1.17.1"
   },

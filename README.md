@@ -10,7 +10,7 @@ See the [API Reference](https://github.com/buianhthang/joi-array-extensions/blob
 Usage is a two steps process. First, a schema is constructed using the provided types and constraints:
 
 ```js
-const BaseJoi = require('joi')
+const BaseJoi = require('@hapi/joi')
 const Extension = require('joi-array-extensions')
 const Joi = BaseJoi.extend(Extension)
 

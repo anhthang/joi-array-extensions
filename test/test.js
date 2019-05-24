@@ -1,5 +1,6 @@
-const Lab = require('lab')
-const BaseJoi = require('joi')
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const BaseJoi = require('@hapi/joi')
 const Helper = require('./helper')
 const Extension = require('../')
 
@@ -7,7 +8,8 @@ const Joi = BaseJoi.extend(Extension)
 
 const lab = Lab.script()
 
-const { describe, it, expect } = lab
+const { describe, it } = lab
+const { expect } = Code
 
 const input = {
     correct: [
@@ -55,7 +57,7 @@ const input = {
 
 describe('array', () => {
     describe('continuous()', () => {
-        it('fails with bad formats', done => {
+        it('fails with bad formats', () => {
             expect(() => {
                 Joi.array()
                     .items({
@@ -87,11 +89,9 @@ describe('array', () => {
                     })
                     .continuous('idx', 1.2)
             }).to.throw(/must be an integer/)
-
-            done()
         })
 
-        it('validates without limit', done => {
+        it('validates without limit', () => {
             let schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -139,11 +139,9 @@ describe('array', () => {
                     'child "arr" fails because ["function comparator" must be start from 0]'
                 ]
             ])
-
-            done()
         })
 
-        it('validates not start from limit', done => {
+        it('validates not start from limit', () => {
             let schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -191,11 +189,9 @@ describe('array', () => {
                     'child "arr" fails because ["function comparator" must be start from 2]'
                 ]
             ])
-
-            done()
         })
 
-        it('validates noncontinuous', done => {
+        it('validates noncontinuous', () => {
             let schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -244,11 +240,9 @@ describe('array', () => {
                     'child "arr" fails because ["function comparator" should be 3]'
                 ]
             ])
-
-            done()
         })
 
-        it('validates with limit is a reference', done => {
+        it('validates with limit is a reference', () => {
             let schema = Joi.object().keys({
                 ref: Joi.number().integer(),
                 arr: Joi.array()
@@ -288,21 +282,19 @@ describe('array', () => {
                     'child "arr" fails because ["arr" references "ref" which is not a positive integer]'
                 ]
             ])
-
-            done()
         })
 
-        it('validates all correct', done => {
+        it('validates all correct', () => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
                 })
                 .continuous('idx', 1)
 
-            Helper.validate(schema, [[input.correct, true]], done)
+            Helper.validate(schema, [[input.correct, true]])
         })
 
-        it('should be correctly described', done => {
+        it('should be correctly described', () => {
             const schema = Joi.array()
                 .items({
                     idx: Joi.number().integer()
@@ -313,14 +305,6 @@ describe('array', () => {
                 type: 'array',
                 flags: {
                     sparse: false
-                },
-                options: {
-                    language: {
-                        array: {
-                            continuous_from: 'must be start from {{limit}}',
-                            continuous_broken: 'should be {{expectedValue}}'
-                        }
-                    }
                 },
                 rules: [
                     {
@@ -339,6 +323,9 @@ describe('array', () => {
                         children: {
                             idx: {
                                 type: 'number',
+                                flags: {
+                                    unsafe: false
+                                },
                                 invalids: [Infinity, -Infinity],
                                 rules: [
                                     {
@@ -350,7 +337,6 @@ describe('array', () => {
                     }
                 ]
             })
-            done()
         })
     })
 })
