@@ -23,9 +23,9 @@ const schema = Joi.array().items({
 
 ```
 7 tests complete
-Test duration: 56 ms
+Test duration: 51 ms
 Assertions count: 40 (verbosity: 5.71)
-No global variable leaks detected
+Leaks: No issues
 Coverage: 100.00%
-Linting results: No issues
+Lint: No issues
 ```
